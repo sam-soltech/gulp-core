@@ -8,7 +8,6 @@ var reload      = browserSync.reload;
  * Compile jade files into HTML
  */
 gulp.task('templates', function() {
-
     var YOUR_LOCALS = {};
 
     return gulp.src('./app/*.jade')
@@ -60,6 +59,4 @@ gulp.task('default', ['sass', 'templates'], function () {
 
 gulp.task('prod', ['sass-prod', 'templates'], function () {
     browserSync({server: './dist'});
-    gulp.watch('./app/scss/*.scss', ['sass']);
-    gulp.watch('./app/*.jade',      ['jade-watch']);
 });
