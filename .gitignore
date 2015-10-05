@@ -1,0 +1,10 @@
+# Logs
+logs
+*.log
+
+#npm and bower files
+node_modules
+bower_components
+
+#complied assets
+dist
