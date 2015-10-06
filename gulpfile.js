@@ -2,6 +2,7 @@ var gulp        = require('gulp');
 var browserSync = require('browser-sync');
 var sass        = require('gulp-sass');
 var jade        = require('gulp-jade');
+var concat      = require('gulp-concat');
 var reload      = browserSync.reload;
 
 /**
@@ -18,15 +19,10 @@ gulp.task('templates', function() {
     .pipe(gulp.dest('./dist/'))
 });
 
-/**
- * Important!!
- * Separate task for the reaction to `.jade` files
- */
+
 gulp.task('jade-watch', ['templates'], reload);
 
-/**
- * Sass task for live injecting into all browsers
- */
+
 gulp.task('sass', function () {
   return gulp.src('./app/scss/*.scss')
   .pipe(sass({
@@ -37,6 +33,12 @@ gulp.task('sass', function () {
   .pipe(reload({stream: true}));
 });
 
+
+gulp.task('scripts', function () {
+  return gulp.src(['./app/js/dev-config.js', './app/js/app.js'])
+    .pipe(concat('app.js'))
+    .pipe(gulp.dest('./dist/js'));
+});
 
 
 gulp.task('sass-prod', function () {
@@ -50,10 +52,11 @@ gulp.task('sass-prod', function () {
 /**
  * Serve and watch the scss/jade files for changes
  */
-gulp.task('default', ['sass', 'templates'], function () {
+gulp.task('default', ['sass', 'scripts', 'templates'], function () {
     browserSync({server: './dist'});
     gulp.watch('./app/scss/*.scss', ['sass']);
-    gulp.watch('./app/*.jade',      ['jade-watch']);
+    gulp.watch(['./app/*.jade','./app/includes/*.jade'],   ['jade-watch']);
+    gulp.watch('./app/js/*.js',      ['scripts']);
 });
 
 
